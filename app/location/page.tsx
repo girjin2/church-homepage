@@ -1,0 +1,2 @@
+import { getSettings } from "../../lib/content";
+export default async function Location(){const s=await getSettings();return <><div className="page-head"><div className="wrap"><h1>오시는 길</h1></div></div><div className="wrap"><div className="card"><h2>{s.church_name}</h2><p><strong>주소</strong> {s.address}</p><p><strong>전화</strong> {s.phone}</p><div className="actions"><a className="btn" href={s.map_url} target="_blank">지도 열기</a></div></div></div></>}

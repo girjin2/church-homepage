@@ -1,0 +1,2 @@
+import { getSettings } from "../../lib/content";
+export default async function Worship(){const s=await getSettings();return <><div className="page-head"><div className="wrap"><h1>예배안내</h1></div></div><div className="wrap"><div className="grid"><div className="card"><h3>주일예배</h3><p>{s.sunday_service}</p></div><div className="card"><h3>수요예배</h3><p>{s.wednesday_service}</p></div><div className="card"><h3>새벽기도회</h3><p>{s.dawn_service}</p></div></div></div></>}

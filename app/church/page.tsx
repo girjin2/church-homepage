@@ -1,0 +1,2 @@
+import { getSettings } from "../../lib/content";
+export default async function Church(){const s=await getSettings();return <><div className="page-head"><div className="wrap"><h1>교회소개</h1></div></div><div className="wrap"><div className="grid two"><div className="card"><h2>{s.church_name}</h2><p>{s.slogan}</p><p>복음 안에서 하나님을 예배하고 이웃을 사랑하며 다음 세대를 세우는 공동체를 지향합니다.</p></div><div className="card"><h2>담임목사</h2><p>{s.pastor_name}</p><p>말씀과 기도, 섬김을 통해 성도와 지역사회를 섬기겠습니다.</p></div></div></div></>}

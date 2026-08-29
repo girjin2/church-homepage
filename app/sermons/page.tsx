@@ -1,0 +1,2 @@
+import { getSermons } from "../../lib/content";
+export default async function Sermons(){const rows=await getSermons(100);return <><div className="page-head"><div className="wrap"><h1>설교</h1></div></div><div className="wrap"><div className="list">{rows.map((s:any)=><div className="list-row" key={s.id}><div><strong>{s.title}</strong><div className="meta">{s.scripture} · {s.preacher} · {s.service_date}</div></div><a className="btn" href={s.youtube_url} target="_blank">보기</a></div>)}</div></>}
