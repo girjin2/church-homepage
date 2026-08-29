@@ -1,32 +1,6 @@
 import { getSermons } from "../../lib/content";
-
-export default async function Sermons() {
-  const rows = await getSermons(100);
-
-  return (
-    <>
-      <div className="page-head">
-        <div className="wrap">
-          <h1>설교</h1>
-        </div>
-      </div>
-      <div className="wrap">
-        <div className="list">
-          {rows.map((s: any) => (
-            <div className="list-row" key={s.id}>
-              <div>
-                <strong>{s.title}</strong>
-                <div className="meta">
-                  {s.scripture} · {s.preacher} · {s.service_date}
-                </div>
-              </div>
-              <a className="btn" href={s.youtube_url} target="_blank" rel="noreferrer">
-                보기
-              </a>
-            </div>
-          ))}
-        </div>
-      </div>
-    </>
-  );
+export default async function Sermons(){
+  const rows=await getSermons();
+  return <><div className="page-head"><div className="wrap"><div className="mini-label">SERMON</div><h1>설교</h1></div></div>
+  <div className="wrap"><div className="grid">{rows.map((s:any)=><article className="card" key={s.id}><div className="meta">{s.service_date}</div><h3>{s.title}</h3><p>{s.scripture}</p><div className="meta">{s.preacher}</div>{s.youtube_url&&<><div className="spacer"/><a className="btn" href={s.youtube_url} target="_blank" rel="noreferrer">설교 보기</a></>}</article>)}</div></div></>;
 }

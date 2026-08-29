@@ -4,7 +4,10 @@ import { getSettings } from "../lib/content";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
-export const metadata: Metadata = { title: "교회 홈페이지", description: "교회 소개와 예배 안내" };
+export const metadata: Metadata = {
+  title: "서재교회",
+  description: "하나님의 사랑과 은혜로 생명을 살리는 서재교회"
+};
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const settings = await getSettings();
