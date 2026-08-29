@@ -1,4 +1,12 @@
+import type { Metadata } from "next";
 import { getSettings } from "../../lib/content";
+
+export const metadata: Metadata = {
+  title: "오시는 길",
+  description: "대구 달성군 다사읍 서재로 104 서재교회 오시는 길과 전화번호, 버스 노선을 안내합니다.",
+  alternates: { canonical: "/location" },
+  openGraph: { title: "오시는 길 | 서재교회", description: "대구 달성군 다사읍 서재로 104 서재교회 오시는 길과 전화번호, 버스 노선을 안내합니다.", url: "https://seojae-church.vercel.app/location" }
+};
 
 export default async function Location() {
   const s = await getSettings();

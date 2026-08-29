@@ -1,4 +1,12 @@
+import type { Metadata } from "next";
 import { getSettings } from "../../lib/content";
+
+export const metadata: Metadata = {
+  title: "교회소개",
+  description: "대구 달성군 다사읍 서재교회의 표어, 교단, 설립일과 섬기는 이를 소개합니다.",
+  alternates: { canonical: "/church" },
+  openGraph: { title: "교회소개 | 서재교회", description: "대구 달성군 다사읍 서재교회의 표어, 교단, 설립일과 섬기는 이를 소개합니다.", url: "https://seojae-church.vercel.app/church" }
+};
 
 export default async function Church() {
   const s = await getSettings();

@@ -1,4 +1,12 @@
+import type { Metadata } from "next";
 import { getSettings } from "../../lib/content";
+
+export const metadata: Metadata = {
+  title: "예배안내",
+  description: "서재교회 주일예배, 수요예배, 금요예배, 새벽예배와 다음 세대 예배시간을 안내합니다.",
+  alternates: { canonical: "/worship" },
+  openGraph: { title: "예배안내 | 서재교회", description: "서재교회 주일예배, 수요예배, 금요예배, 새벽예배와 다음 세대 예배시간을 안내합니다.", url: "https://seojae-church.vercel.app/worship" }
+};
 
 export default async function Worship() {
   const s = await getSettings();

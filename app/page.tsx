@@ -67,6 +67,18 @@ export default async function Home() {
       </div>
     </section>
 
+    <section className="wrap seo-location">
+      <div className="card">
+        <div className="mini-label">SEOJAE CHURCH · DAEGU</div>
+        <h2 className="section-title">대구 달성군 다사읍 서재교회</h2>
+        <p>서재교회는 대구광역시 달성군 다사읍 서재로 104, 서재초등학교 앞에 있습니다. 주일예배와 수요예배, 금요예배, 새벽예배를 드리며 설교와 주보, 교회소식을 홈페이지에서 확인하실 수 있습니다.</p>
+        <div className="actions">
+          <Link className="btn" href="/location">서재교회 오시는 길</Link>
+          <Link className="btn light" href="/church">서재교회 소개</Link>
+        </div>
+      </div>
+    </section>
+
     <section className="wrap">
       <div className="grid two">
         <div>

@@ -1,4 +1,12 @@
+import type { Metadata } from "next";
 import { getBulletins } from "../../lib/content";
+
+export const metadata: Metadata = {
+  title: "주보",
+  description: "서재교회 이번 주 주보와 지난 주보를 확인하세요. 예배순서와 교회소식을 안내합니다.",
+  alternates: { canonical: "/bulletin" },
+  openGraph: { title: "주보 | 서재교회", description: "서재교회 이번 주 주보와 지난 주보를 확인하세요. 예배순서와 교회소식을 안내합니다.", url: "https://seojae-church.vercel.app/bulletin" }
+};
 
 export default async function Bulletin() {
   const rows = await getBulletins(100);
