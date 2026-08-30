@@ -8,8 +8,12 @@ const nav = [
 export default function Header({ churchName }: { churchName: string }) {
   return <header className="header">
     <div className="header-inner">
-      <Link className="brand" href="/">{churchName}</Link>
-      <nav className="nav">{nav.map(([label, href]) => <Link key={href} href={href}>{label}</Link>)}</nav>
+      <Link className="brand brand-logo" href="/" aria-label={`${churchName} 홈`}>
+        <img src="/images/seojae-header-logo.png" alt="대한예수교장로회 서재교회" />
+      </Link>
+      <nav className="nav" aria-label="주요 메뉴">
+        {nav.map(([label, href]) => <Link key={href} href={href}>{label}</Link>)}
+      </nav>
     </div>
   </header>;
 }

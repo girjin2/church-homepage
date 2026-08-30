@@ -17,14 +17,16 @@ export default async function Home() {
   ].filter(([, value]) => value);
 
   return <>
-    <section className="hero">
-      <div className="hero-inner">
-        <div className="eyebrow">{settings.denomination || "대한예수교장로회"} · {settings.church_name}</div>
+    <section className="hero hero-photo">
+      <div className="hero-shade" aria-hidden="true" />
+      <div className="hero-inner hero-content">
         <h1>{settings.hero_title}</h1>
         <p>{settings.hero_text}</p>
         <div className="actions">
-          <Link className="btn light" href="/worship">예배시간 보기</Link>
-          {settings.youtube_url && <a className="btn outline" href={settings.youtube_url} target="_blank" rel="noreferrer">YouTube 예배</a>}
+          <Link className="btn hero-primary" href="/worship">예배시간 보기</Link>
+          {settings.youtube_url
+            ? <a className="btn hero-secondary" href={settings.youtube_url} target="_blank" rel="noreferrer">유튜브</a>
+            : <span className="btn hero-secondary disabled-link" aria-disabled="true" title="관리자에서 YouTube 주소를 등록하면 활성화됩니다.">유튜브</span>}
         </div>
       </div>
     </section>
