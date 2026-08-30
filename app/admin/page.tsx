@@ -7,6 +7,37 @@ const blankSettings:any={church_name:"",slogan:"",pastor_name:"",associate_pasto
 const today = () => new Date().toISOString().slice(0,10);
 const daysAgo = (days:number) => { const d=new Date(); d.setDate(d.getDate()-days); return d.toISOString().slice(0,10); };
 
+const CHURCH_IMAGE_BUCKET = "교회 이미지";
+const MAX_SOURCE_IMAGE_BYTES = 25 * 1024 * 1024;
+
+async function compressForHomepage(file: File): Promise<Blob> {
+  if (!file.type.startsWith("image/")) throw new Error("사진 파일만 선택해 주세요.");
+  if (file.size > MAX_SOURCE_IMAGE_BYTES) throw new Error("원본 사진은 25MB 이하로 선택해 주세요.");
+  const objectUrl = URL.createObjectURL(file);
+  try {
+    const image = await new Promise<HTMLImageElement>((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = () => reject(new Error("사진을 읽을 수 없습니다."));
+      img.src = objectUrl;
+    });
+    const maxSide = 1600;
+    const scale = Math.min(1, maxSide / Math.max(image.naturalWidth, image.naturalHeight));
+    const width = Math.max(1, Math.round(image.naturalWidth * scale));
+    const height = Math.max(1, Math.round(image.naturalHeight * scale));
+    const canvas = document.createElement("canvas");
+    canvas.width = width; canvas.height = height;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) throw new Error("사진 압축을 시작할 수 없습니다.");
+    ctx.drawImage(image, 0, 0, width, height);
+    return await new Promise<Blob>((resolve, reject) => {
+      canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error("사진 압축에 실패했습니다.")), "image/webp", 0.82);
+    });
+  } finally {
+    URL.revokeObjectURL(objectUrl);
+  }
+}
+
 export default function Admin(){
  const router=useRouter();
  const [ready,setReady]=useState(false); const [msg,setMsg]=useState(""); const [busy,setBusy]=useState(false);
@@ -35,7 +66,29 @@ export default function Admin(){
 
  async function addSermon(e:FormEvent<HTMLFormElement>){e.preventDefault();if(!sb)return;setBusy(true);const form=e.currentTarget;const f=new FormData(form);const row={title:f.get("title"),scripture:f.get("scripture"),preacher:f.get("preacher"),youtube_url:f.get("youtube_url")||"",service_date:f.get("service_date")};const {error}=await sb.from("sermons").insert(row);setMsg(error?error.message:"설교를 등록했습니다.");if(!error){form.reset();await load();}setBusy(false);}
 
- async function addNotice(e:FormEvent<HTMLFormElement>){e.preventDefault();if(!sb)return;setBusy(true);const form=e.currentTarget;const f=new FormData(form);const row={title:f.get("title"),body:f.get("body"),published_at:f.get("published_at")};const {error}=await sb.from("notices").insert(row);setMsg(error?error.message:"예배 소식을 등록했습니다. 홈페이지에는 최신 5개가 우선 표시됩니다.");if(!error){form.reset();await load();}setBusy(false);}
+ async function addNotice(e:FormEvent<HTMLFormElement>){
+   e.preventDefault(); if(!sb)return; setBusy(true); setMsg("사진을 준비하고 예배 소식을 등록하고 있습니다.");
+   const form=e.currentTarget; const f=new FormData(form); const image=f.get("image") as File;
+   const row={title:f.get("title"),body:f.get("body"),published_at:f.get("published_at")};
+   const inserted=await sb.from("notices").insert(row).select("id").single();
+   if(inserted.error||!inserted.data){setMsg(inserted.error?.message||"예배 소식을 등록하지 못했습니다.");setBusy(false);return;}
+   const noticeId=inserted.data.id;
+   let imageNote="사진 없이";
+   if(image?.size){
+     try {
+       const compressed=await compressForHomepage(image);
+       const path=`${noticeId}.webp`;
+       const up=await sb.storage.from(CHURCH_IMAGE_BUCKET).upload(path,compressed,{contentType:"image/webp",upsert:true,cacheControl:"3600"});
+       if(up.error) throw up.error;
+       imageNote=`사진 ${(compressed.size/1024).toFixed(0)}KB로 압축하여`;
+     } catch(err:any) {
+       await sb.from("notices").delete().eq("id",noticeId);
+       setMsg(`사진 업로드에 실패하여 소식 등록을 취소했습니다. ${err?.message||err}`); setBusy(false); return;
+     }
+   }
+   setMsg(`${imageNote} 예배 소식을 등록했습니다. 홈페이지에는 최신 5개가 우선 표시됩니다.`);
+   form.reset(); await load(); setBusy(false);
+ }
 
  async function addBulletin(e:FormEvent<HTMLFormElement>){
    e.preventDefault(); if(!sb)return; setBusy(true); const form=e.currentTarget; const f=new FormData(form); const file=f.get("file") as File; const serviceDate=String(f.get("service_date")||""); const title=String(f.get("title")||"");
@@ -60,9 +113,18 @@ export default function Admin(){
    setMsg(error?error.message:`${serviceDate} 주보를 저장했습니다. 같은 날짜 주보는 자동으로 교체됩니다.`); if(!error){form.reset();await load();} setBusy(false);
  }
 
- async function del(table:string,id:number,storagePath?:string){if(!sb||!confirm("정말 삭제하시겠습니까? 삭제한 자료는 복구할 수 없습니다."))return;setBusy(true);if(storagePath)await sb.storage.from("bulletins").remove([storagePath]);const {error}=await sb.from(table).delete().eq("id",id);setMsg(error?error.message:"삭제했습니다.");if(!error)await load();setBusy(false);}
+ async function del(table:string,id:number,storagePath?:string){
+   if(!sb||!confirm("정말 삭제하시겠습니까? 삭제한 자료는 복구할 수 없습니다."))return; setBusy(true);
+   if(table==="notices") await sb.storage.from(CHURCH_IMAGE_BUCKET).remove([`${id}.webp`]);
+   if(storagePath) await sb.storage.from("bulletins").remove([storagePath]);
+   const {error}=await sb.from(table).delete().eq("id",id); setMsg(error?error.message:"삭제했습니다."); if(!error)await load(); setBusy(false);
+ }
 
- async function clearPastNotices(){if(!sb||!pastNotices.length)return;if(!confirm(`30일이 지난 예배 소식 ${pastNotices.length}개를 모두 삭제하시겠습니까?`))return;setBusy(true);const ids=pastNotices.map(x=>x.id);const {error}=await sb.from("notices").delete().in("id",ids);setMsg(error?error.message:`지난 예배 소식 ${ids.length}개를 정리했습니다.`);if(!error)await load();setBusy(false);}
+ async function clearPastNotices(){
+   if(!sb||!pastNotices.length)return; if(!confirm(`30일이 지난 예배 소식 ${pastNotices.length}개를 모두 삭제하시겠습니까?`))return; setBusy(true);
+   const ids=pastNotices.map(x=>x.id); const paths=ids.map(id=>`${id}.webp`); if(paths.length) await sb.storage.from(CHURCH_IMAGE_BUCKET).remove(paths);
+   const {error}=await sb.from("notices").delete().in("id",ids); setMsg(error?error.message:`지난 예배 소식 ${ids.length}개와 연결 사진을 정리했습니다.`); if(!error)await load(); setBusy(false);
+ }
 
  async function logout(){if(sb)await sb.auth.signOut();router.push("/admin/login");}
  if(!ready)return <div className="admin-shell">관리자 정보를 확인하고 있습니다.</div>;
@@ -90,7 +152,7 @@ export default function Admin(){
 
    {tab==="sermons"&&<><section className="card"><h2>설교 등록</h2><form className="form" onSubmit={addSermon}><input name="title" placeholder="설교 제목" required/><input name="scripture" placeholder="본문 예: 요한복음 3:16" required/><input name="preacher" placeholder="설교자" required/><input name="youtube_url" type="url" placeholder="YouTube 영상 주소 (없으면 비워도 됩니다)"/><input name="service_date" type="date" defaultValue={today()} required/><button className="btn" disabled={busy}>설교 등록</button></form></section><div className="spacer"/><DataSection title="최근 설교" rows={recentSermons} dateKey="service_date" onDelete={(x:any)=>del("sermons",x.id)}/>{pastSermons.length>0&&<><div className="spacer"/><DataSection title="지난 설교" rows={pastSermons} dateKey="service_date" onDelete={(x:any)=>del("sermons",x.id)}/></>}</>}
 
-   {tab==="notices"&&<><section className="card"><h2>예배 소식 등록</h2><p className="small">홈페이지에는 최신 5개가 자동으로 표시되고, 이전 소식은 보관됩니다. 필요할 때 삭제할 수 있습니다.</p><form className="form" onSubmit={addNotice}><input name="title" placeholder="제목" required/><textarea name="body" placeholder="내용" required/><input name="published_at" type="date" defaultValue={today()} required/><button className="btn" disabled={busy}>소식 등록</button></form></section><div className="spacer"/><DataSection title="최근 예배 소식" rows={recentNotices} dateKey="published_at" onDelete={(x:any)=>del("notices",x.id)}/>{pastNotices.length>0&&<><div className="spacer"/><section className="card"><div className="section-row"><div><h2>지난 예배 소식</h2><p className="small">30일이 지난 자료입니다. 필요 없으면 정리할 수 있습니다.</p></div><button className="btn danger" disabled={busy} onClick={clearPastNotices}>모두 삭제</button></div><DataRows rows={pastNotices} dateKey="published_at" onDelete={(x:any)=>del("notices",x.id)}/></section></>}</>}
+   {tab==="notices"&&<><section className="card"><h2>예배 소식 등록</h2><p className="small">사진을 선택하면 등록 전에 자동으로 최대 1600px WebP로 압축하여 Supabase의 <strong>교회 이미지</strong> 버킷에 저장합니다. 사진은 선택 사항이며, 홈페이지에는 최신 5개가 자동으로 표시됩니다.</p><form className="form" onSubmit={addNotice}><input name="title" placeholder="제목" required/><textarea name="body" placeholder="내용" required/><label className="upload-field"><span>대표 사진 선택</span><input name="image" type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif"/><small>휴대폰 원본도 선택할 수 있습니다. 브라우저가 읽을 수 있는 사진은 자동 축소·압축합니다.</small></label><input name="published_at" type="date" defaultValue={today()} required/><button className="btn" disabled={busy}>소식 등록</button></form></section><div className="spacer"/><DataSection title="최근 예배 소식" rows={recentNotices} dateKey="published_at" onDelete={(x:any)=>del("notices",x.id)}/>{pastNotices.length>0&&<><div className="spacer"/><section className="card"><div className="section-row"><div><h2>지난 예배 소식</h2><p className="small">30일이 지난 자료입니다. 삭제하면 연결된 사진도 함께 정리합니다.</p></div><button className="btn danger" disabled={busy} onClick={clearPastNotices}>모두 삭제</button></div><DataRows rows={pastNotices} dateKey="published_at" onDelete={(x:any)=>del("notices",x.id)}/></section></>}</>}
 
    {tab==="bulletins"&&<><section className="card"><h2>주보 등록 또는 교체</h2><p className="small">같은 날짜의 주보를 다시 올리면 기존 주보를 자동으로 교체하고 중복 항목을 만들지 않습니다.</p><form className="form" onSubmit={addBulletin}><input name="title" placeholder="예: 2026년 8월 30일 주보" required/><input name="service_date" type="date" defaultValue={today()} required/><input name="file" type="file" accept=".pdf,.ppt,.pptx,application/pdf,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation" required/><button className="btn" disabled={busy}>주보 업로드</button></form></section><div className="spacer"/><DataSection title="최근 주보" rows={recentBulletins} dateKey="service_date" onDelete={(x:any)=>del("bulletins",x.id,x.storage_path)}/>{pastBulletins.length>0&&<><div className="spacer"/><DataSection title="지난 주보" rows={pastBulletins} dateKey="service_date" onDelete={(x:any)=>del("bulletins",x.id,x.storage_path)}/></>}</>}
  </div>;

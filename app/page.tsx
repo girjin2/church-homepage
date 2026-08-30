@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getBulletins, getNotices, getSermons, getSettings } from "../lib/content";
+import NewsImage from "../components/NewsImage";
 
 const newsThumbs = [
   "/images/news/news-1.jpg",
@@ -54,7 +55,7 @@ export default async function Home() {
       {notices.length ? <div className="worship-news-grid">
         {notices.map((n:any, i:number)=>
           <Link href="/news" className="worship-news-card" key={n.id}>
-            <img src={newsThumbs[i % newsThumbs.length]} alt="" aria-hidden="true" />
+            <NewsImage noticeId={n.id} fallbackSrc={newsThumbs[i % newsThumbs.length]} alt={`${n.title} 대표 사진`} />
             <div className="news-card-body">
               <span className="news-kicker">예배 소식</span>
               <h3>{n.title}</h3>

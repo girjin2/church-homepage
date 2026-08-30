@@ -72,3 +72,9 @@
   .worship-news-card>img{height:100%;min-height:150px}
   .public-section-row{align-items:flex-end}
 }
+
+/* Church image upload */
+.upload-field{display:grid;gap:7px;padding:14px;border:1px solid #d8dee7;border-radius:10px;background:#fafbfd}
+.upload-field>span{font-weight:700}
+.upload-field input[type=file]{padding:9px;background:#fff}
+.upload-field small{color:var(--muted);line-height:1.5}
