@@ -1,14 +1,5 @@
 import Link from "next/link";
 import { getBulletins, getNotices, getSermons, getSettings } from "../lib/content";
-import NewsImage from "../components/NewsImage";
-
-const newsThumbs = [
-  "/images/news/news-1.jpg",
-  "/images/news/news-2.jpg",
-  "/images/news/news-3.jpg",
-  "/images/news/news-4.jpg",
-  "/images/news/news-5.jpg",
-];
 
 export default async function Home() {
   const [settings, sermons, notices, bulletins] = await Promise.all([
@@ -47,25 +38,10 @@ export default async function Home() {
 
     <section className="wrap worship-news-wrap">
       <div className="section-row public-section-row">
-        <div>
-          <h2 className="section-title">예배 소식</h2>
-          <p className="section-lead">서재교회의 한 주간 소식과 나눔을 전합니다. 최신 5개가 자동으로 표시됩니다.</p>
-        </div>
-        <Link className="more-link" href="/news">더보기 ›</Link>
+        <div><h2 className="section-title">교회소식</h2><p className="section-lead">최근 광고를 확인하고, 사진은 교회소식에서 따로 볼 수 있습니다.</p></div>
+        <div style={{display:"flex",gap:16}}><Link className="more-link" href="/news#ads">광고</Link><Link className="more-link" href="/news#photos">사진</Link></div>
       </div>
-      {notices.length ? <div className="worship-news-grid">
-        {notices.map((n:any, i:number)=>
-          <Link href="/news" className="worship-news-card" key={n.id}>
-            <NewsImage noticeId={n.id} fallbackSrc={newsThumbs[i % newsThumbs.length]} alt={`${n.title} 대표 사진`} />
-            <div className="news-card-body">
-              <span className="news-kicker">예배 소식</span>
-              <h3>{n.title}</h3>
-              <p>{n.body}</p>
-              <div className="news-card-foot"><span>{n.published_at}</span><span>›</span></div>
-            </div>
-          </Link>
-        )}
-      </div> : <div className="card empty-state">등록된 예배 소식이 없습니다. 관리자에서 새 소식을 등록하면 여기에 최신 5개가 표시됩니다.</div>}
+      {notices.length ? <div className="list">{notices.map((n:any)=><Link href="/news#ads" className="list-row" key={n.id}><div><strong>{n.title}</strong><div className="meta">{n.published_at}</div></div><span>›</span></Link>)}</div> : <div className="card empty-state">등록된 광고가 없습니다.</div>}
     </section>
 
     <section className="wrap home-lower">
