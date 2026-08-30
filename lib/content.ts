@@ -16,18 +16,14 @@ export async function getSermons(limit = 20) {
   return error ? fallbackSermons.slice(0, limit) : (data || []);
 }
 
-export async function getNotices(limit = 20) {
+export async function getNotices(limit = 20, includeOld = false) {
   const supabase = getPublicClient();
   if (!supabase) return fallbackNotices.slice(0, limit);
   const { data, error } = await supabase.from("notices").select("*").order("published_at", { ascending: false }).limit(limit);
   if (error) return fallbackNotices.slice(0, limit);
   const rows = data || [];
-  // 공지는 등록일로부터 30일까지만 공개 화면에 표시합니다.
-  const cutoff = new Date();
-  cutoff.setHours(0, 0, 0, 0);
-  cutoff.setDate(cutoff.getDate() - 30);
-  const cutoffStr = cutoff.toISOString().slice(0, 10);
-  return rows.filter((row: any) => !row.published_at || row.published_at >= cutoffStr).slice(0, limit);
+  // 등록된 소식은 삭제하기 전까지 보관합니다. 홈에서는 최신 5개만 표시합니다.
+  return rows.slice(0, limit);
 }
 
 export async function getBulletins(limit = 20) {

@@ -8,7 +8,7 @@ const nav = [
 export default function Header({ churchName }: { churchName: string }) {
   return <header className="header">
     <div className="header-inner">
-      <Link className="brand brand-logo" href="/" aria-label={`${churchName} 홈`}>
+      <Link className="brand brand-logo-v5" href="/" aria-label={`${churchName} 홈`}>
         <img src="/images/seojae-header-logo.png" alt="대한예수교장로회 서재교회" />
       </Link>
       <nav className="nav" aria-label="주요 메뉴">
