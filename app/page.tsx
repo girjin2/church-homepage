@@ -29,6 +29,7 @@ export default async function Home() {
             {settings.youtube_url
               ? <a className="btn hero-secondary" href={settings.youtube_url} target="_blank" rel="noreferrer">유튜브</a>
               : <span className="btn hero-secondary disabled-link" aria-disabled="true" title="관리자에서 YouTube 주소를 등록하면 활성화됩니다.">유튜브</span>}
+            <Link className="btn hero-secondary" href="/app-download">앱 다운로드</Link>
           </div>
         </div>
       </div>
