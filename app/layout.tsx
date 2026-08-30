@@ -1,13 +1,33 @@
 import "./globals.css";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { getSettings } from "../lib/content";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import PwaRegister from "../components/PwaRegister";
 
 const SITE_URL = "https://seojae-church.vercel.app";
 
+export const viewport: Viewport = {
+  themeColor: "#ffffff",
+  viewportFit: "cover"
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
+  applicationName: "서재교회",
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    title: "서재교회",
+    statusBarStyle: "default"
+  },
+  icons: {
+    icon: [
+      { url: "/icons/favicon-48.png", sizes: "48x48", type: "image/png" },
+      { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" }
+    ],
+    apple: [{ url: "/icons/apple-touch-icon.png", sizes: "180x180", type: "image/png" }]
+  },
   title: {
     default: "서재교회 | 대구 달성군 다사읍",
     template: "%s | 서재교회"
@@ -75,6 +95,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
 
   return <html lang="ko">
     <body>
+      <PwaRegister />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(churchJsonLd) }} />
       <Header churchName={settings.church_name}/>
       <main>{children}</main>
