@@ -31,10 +31,10 @@ export default function CommunitySignup(){
     <h1>회원가입</h1>
     <p className="section-lead">이메일이 없어도 가입할 수 있습니다. 연락처는 로그인과 회원 확인을 위해 반드시 입력해 주세요.</p>
     <form className="form" onSubmit={signup}>
-      <input placeholder="이름" value={name} onChange={e=>setName(e.target.value)} required minLength={2}/>
-      <input inputMode="tel" placeholder="연락처 예: 01012345678" value={phone} onChange={e=>setPhone(e.target.value)} required/>
-      <input type="email" placeholder="이메일 선택사항" value={email} onChange={e=>setEmail(e.target.value)}/>
-      <input type="password" placeholder="비밀번호 6자 이상" value={password} onChange={e=>setPassword(e.target.value)} required minLength={6}/>
+      <input autoComplete="name" placeholder="이름" value={name} onChange={e=>setName(e.target.value)} required minLength={2}/>
+      <input inputMode="tel" autoComplete="tel" placeholder="연락처 예: 01012345678" value={phone} onChange={e=>setPhone(e.target.value)} required/>
+      <input type="email" autoComplete="email" placeholder="이메일 선택사항" value={email} onChange={e=>setEmail(e.target.value)}/>
+      <input type="password" autoComplete="new-password" placeholder="비밀번호 6자 이상" value={password} onChange={e=>setPassword(e.target.value)} required minLength={6}/>
       <button className="btn" disabled={busy}>{busy?"가입 중...":"회원가입"}</button>
     </form>
     {msg&&<div className="status" style={{marginTop:16}}>{msg}</div>}
