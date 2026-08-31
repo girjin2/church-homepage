@@ -2,7 +2,7 @@ import Link from "next/link";
 
 const nav = [
   ["교회소개", "/church"], ["예배안내", "/worship"], ["설교", "/sermons"],
-  ["주보", "/bulletin"], ["교회소식", "/news"], ["오시는 길", "/location"]
+  ["주보", "/bulletin"], ["교회소식", "/news"], ["소통공간", "/community"], ["오시는 길", "/location"]
 ];
 
 export default function Header({ churchName }: { churchName: string }) {
