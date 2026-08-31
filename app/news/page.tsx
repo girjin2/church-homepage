@@ -14,8 +14,8 @@ export default async function News() {
   const sb = getPublicClient();
   let photos:any[] = [];
   if (sb) {
-    const r = await sb.storage.from("교회 이미지").list("photos", { limit: 100, sortBy: { column: "created_at", order: "desc" } });
-    photos = (r.data || []).map((x:any) => ({ ...x, url: sb.storage.from("교회 이미지").getPublicUrl(`photos/${x.name}`).data.publicUrl }));
+    const r = await sb.storage.from("church-images").list("photos", { limit: 100, sortBy: { column: "created_at", order: "desc" } });
+    photos = (r.data || []).map((x:any) => ({ ...x, url: sb.storage.from("church-images").getPublicUrl(`photos/${x.name}`).data.publicUrl }));
   }
 
   return <>
