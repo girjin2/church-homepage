@@ -8,7 +8,7 @@ const today=()=>new Date().toISOString().slice(0,10);
 const daysAgo=(days:number)=>{const d=new Date();d.setDate(d.getDate()-days);return d.toISOString().slice(0,10);};
 const threeYearsAgo=()=>{const d=new Date();d.setFullYear(d.getFullYear()-3);return d.toISOString().slice(0,10);};
 
-const CHURCH_IMAGE_BUCKET="교회 이미지";
+const CHURCH_IMAGE_BUCKET="church-images";
 const MAX_SOURCE_IMAGE_BYTES=25*1024*1024;
 
 async function compressForHomepage(file:File):Promise<Blob>{
