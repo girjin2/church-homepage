@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { getBulletins, getNotices, getSermons, getSettings } from "../lib/content";
-import { getPublicClient } from "../lib/supabase";
 
 export const dynamic = "force-dynamic";
 
@@ -8,19 +7,6 @@ export default async function Home() {
   const [settings, sermons, notices, bulletins] = await Promise.all([
     getSettings(), getSermons(2), getNotices(5, true), getBulletins(1)
   ]);
-
-  const sb = getPublicClient();
-  let photos:any[] = [];
-  if (sb) {
-    const r = await sb.storage.from("church-images").list("photos", {
-      limit: 4,
-      sortBy: { column: "created_at", order: "desc" }
-    });
-    photos = (r.data || []).map((x:any) => ({
-      ...x,
-      url: sb.storage.from("church-images").getPublicUrl(`photos/${x.name}`).data.publicUrl
-    }));
-  }
 
   return <>
     <section className="hero-v5">
@@ -54,19 +40,10 @@ export default async function Home() {
 
     <section className="wrap worship-news-wrap">
       <div className="section-row public-section-row">
-        <div><h2 className="section-title">교회소식</h2><p className="section-lead">최근 광고와 사진을 한눈에 확인합니다.</p></div>
-        <div style={{display:"flex",gap:16}}><Link className="more-link" href="/news#ads">광고</Link><Link className="more-link" href="/news#photos">사진 더보기</Link></div>
+        <div><h2 className="section-title">교회소식</h2><p className="section-lead">서재교회의 새로운 소식을 확인합니다.</p></div>
+        <Link className="more-link" href="/news">더보기 ›</Link>
       </div>
-      {notices.length ? <div className="list">{notices.map((n:any)=><Link href="/news#ads" className="list-row" key={n.id}><div><strong>{n.title}</strong><div className="meta">{n.published_at}</div></div><span>›</span></Link>)}</div> : <div className="card empty-state">등록된 광고가 없습니다.</div>}
-
-      <div className="spacer"/>
-      {photos.length ? <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(180px,1fr))",gap:14}}>{photos.map((p:any)=>{
-        const date=String(p.name).split("__")[0];
-        return <Link href="/news#photos" key={p.name} className="card" style={{padding:0,overflow:"hidden",textDecoration:"none"}}>
-          <img src={p.url} alt={`서재교회 ${date} 사진`} loading="lazy" style={{display:"block",width:"100%",aspectRatio:"4 / 3",objectFit:"cover"}}/>
-          <div className="meta" style={{padding:"10px 12px"}}>{date}</div>
-        </Link>;
-      })}</div> : <div className="card empty-state">등록된 사진이 없습니다.</div>}
+      {notices.length ? <div className="list">{notices.map((n:any)=><Link href="/news" className="list-row" key={n.id}><div><strong>{n.title}</strong><div className="meta">{n.published_at}</div></div><span>›</span></Link>)}</div> : <div className="card empty-state">등록된 교회소식이 없습니다.</div>}
     </section>
 
     <section className="wrap home-lower">
