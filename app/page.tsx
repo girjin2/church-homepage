@@ -87,17 +87,5 @@ export default async function Home() {
         </div>
       </div>
     </section>
-
-    <section className="wrap" style={{ marginTop: 32, marginBottom: 56 }}>
-      <div className="card">
-        <div className="mini-label">CHURCHSTUDIO · SEPARATE TOOL</div>
-        <h2 className="section-title">예배 리더 설치</h2>
-        <p>설교문과 예배 자료를 태블릿에서 읽기 위한 독립 리더입니다. ChurchStudio 방송 프로그램과 분리되어 있어 기존 스튜디오 기능에는 영향을 주지 않습니다.</p>
-        <div className="actions">
-          <Link className="btn" href="/worship-reader">설치 안내 보기</Link>
-          <a className="btn light" href="https://worship-reader-tablet.girjin2.chatgpt.site/" target="_blank" rel="noreferrer">예배 리더 바로 열기</a>
-        </div>
-      </div>
-    </section>
   </>;
 }
