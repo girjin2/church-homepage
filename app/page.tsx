@@ -3,10 +3,16 @@ import { getBulletins, getNotices, getSermons, getSettings } from "../lib/conten
 
 export const dynamic = "force-dynamic";
 
+function getYouTubeVideoId(url:string="") {
+  const m = url.match(/(?:youtube\.com\/(?:watch\?v=|live\/|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})/);
+  return m?.[1] || "";
+}
+
 export default async function Home() {
   const [settings, sermons, notices, bulletins] = await Promise.all([
     getSettings(), getSermons(2), getNotices(5, true), getBulletins(1)
   ]);
+  const liveVideoId = getYouTubeVideoId(settings.youtube_url || "");
 
   return <>
     <section className="hero-v5">
@@ -27,6 +33,26 @@ export default async function Home() {
         </div>
       </div>
     </section>
+
+    {liveVideoId && <section className="wrap" style={{paddingTop:36,paddingBottom:18}}>
+      <div className="section-row public-section-row">
+        <div>
+          <span className="mini-label">YOUTUBE LIVE</span>
+          <h2 className="section-title">서재교회 실시간 예배</h2>
+          <p className="section-lead">현재 진행 중인 유튜브 실시간 방송을 홈페이지에서 바로 시청할 수 있습니다.</p>
+        </div>
+        <a className="more-link" href={settings.youtube_url} target="_blank" rel="noreferrer">유튜브에서 보기 ›</a>
+      </div>
+      <div style={{position:"relative",width:"100%",aspectRatio:"16 / 9",background:"#000",borderRadius:18,overflow:"hidden",boxShadow:"0 10px 30px rgba(15,23,42,.12)"}}>
+        <iframe
+          src={`https://www.youtube.com/embed/${liveVideoId}?autoplay=0&rel=0`}
+          title="서재교회 실시간 예배"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+          style={{position:"absolute",inset:0,width:"100%",height:"100%",border:0}}
+        />
+      </div>
+    </section>}
 
     <section className="wrap motto-wrap">
       <div className="intro-banner">
