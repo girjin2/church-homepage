@@ -3,17 +3,12 @@ import { getBulletins, getNotices, getSermons, getSettings } from "../lib/conten
 
 export const dynamic = "force-dynamic";
 
-function getYouTubeVideoId(url:string="") {
-  const m = url.match(/(?:youtube\.com\/(?:watch\?v=|live\/|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})/);
-  return m?.[1] || "";
-}
+const SEOJAE_YOUTUBE_CHANNEL_ID = "UCasZ2HjMVV2q_09wfUSyKaw";
 
 export default async function Home() {
   const [settings, sermons, notices, bulletins] = await Promise.all([
     getSettings(), getSermons(2), getNotices(5, true), getBulletins(1)
   ]);
-  const liveVideoId = getYouTubeVideoId(settings.youtube_url || "");
-
   return <>
     <section className="hero-v5">
       <div className="hero-v5-sky" aria-hidden="true" />
@@ -34,7 +29,7 @@ export default async function Home() {
       </div>
     </section>
 
-    {liveVideoId && <section className="wrap" style={{paddingTop:36,paddingBottom:18}}>
+    <section className="wrap" style={{paddingTop:36,paddingBottom:18}}>
       <div className="section-row public-section-row">
         <div>
           <span className="mini-label">YOUTUBE LIVE</span>
@@ -45,14 +40,14 @@ export default async function Home() {
       </div>
       <div style={{position:"relative",width:"100%",aspectRatio:"16 / 9",background:"#000",borderRadius:18,overflow:"hidden",boxShadow:"0 10px 30px rgba(15,23,42,.12)"}}>
         <iframe
-          src={`https://www.youtube.com/embed/${liveVideoId}?autoplay=0&rel=0`}
+          src={`https://www.youtube.com/embed/live_stream?channel=${SEOJAE_YOUTUBE_CHANNEL_ID}&autoplay=0&rel=0`}
           title="서재교회 실시간 예배"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowFullScreen
           style={{position:"absolute",inset:0,width:"100%",height:"100%",border:0}}
         />
       </div>
-    </section>}
+    </section>
 
     <section className="wrap motto-wrap">
       <div className="intro-banner">
