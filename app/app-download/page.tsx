@@ -1,4 +1,5 @@
 import Link from "next/link";
+import InstallPwaButton from "../../components/InstallPwaButton";
 
 export const metadata = {
   title: "서재교회 앱 설치",
@@ -20,7 +21,8 @@ export default function AppDownloadPage() {
         <h2 className="section-title">홈 화면에 서재교회 앱 설치</h2>
         <p>한 번 설치하면 홈 화면의 서재교회 아이콘을 눌러 일반 앱처럼 실행할 수 있습니다. 홈페이지의 최신 소식과 실시간 예배도 같은 화면에서 바로 확인할 수 있습니다.</p>
         <div className="actions">
-          <Link className="btn" href="/">서재교회 홈페이지 열기</Link>
+          <InstallPwaButton className="btn" />
+          <Link className="btn light" href="/">서재교회 홈페이지 열기</Link>
         </div>
       </div>
 
