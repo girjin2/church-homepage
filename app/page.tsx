@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getBulletins, getNotices, getSermons, getSettings } from "../lib/content";
 import InstallPwaButton from "../components/InstallPwaButton";
+import ShareHomepageButton from "../components/ShareHomepageButton";
 
 export const dynamic = "force-dynamic";
 
@@ -25,6 +26,7 @@ export default async function Home() {
               ? <a className="btn hero-secondary" href={settings.youtube_url} target="_blank" rel="noreferrer">유튜브</a>
               : <span className="btn hero-secondary disabled-link" aria-disabled="true" title="관리자에서 YouTube 주소를 등록하면 활성화됩니다.">유튜브</span>}
             <InstallPwaButton />
+            <ShareHomepageButton />
           </div>
         </div>
       </div>
