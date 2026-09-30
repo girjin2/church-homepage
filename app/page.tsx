@@ -5,7 +5,8 @@ import ShareHomepageButton from "../components/ShareHomepageButton";
 
 export const dynamic = "force-dynamic";
 
-const SEOJAE_YOUTUBE_CHANNEL_ID = "UCasZ2HjMVV2q_09wfUSyKaw";
+const SEOJAE_YOUTUBE_CHANNEL_ID = "UCxw7d9xuYok-98el5DRRjew";
+const SEOJAE_YOUTUBE_LIVE_URL = `https://www.youtube.com/channel/${SEOJAE_YOUTUBE_CHANNEL_ID}/live`;
 
 export default async function Home() {
   const [settings, sermons, notices, bulletins] = await Promise.all([
@@ -39,7 +40,7 @@ export default async function Home() {
           <h2 className="section-title">서재교회 실시간 예배</h2>
           <p className="section-lead">현재 진행 중인 유튜브 실시간 방송을 홈페이지에서 바로 시청할 수 있습니다.</p>
         </div>
-        <a className="more-link" href={settings.youtube_url} target="_blank" rel="noreferrer">유튜브에서 보기 ›</a>
+        <a className="more-link" href={SEOJAE_YOUTUBE_LIVE_URL} target="_blank" rel="noreferrer">유튜브에서 보기 ›</a>
       </div>
       <div style={{position:"relative",width:"100%",aspectRatio:"16 / 9",background:"#000",borderRadius:18,overflow:"hidden",boxShadow:"0 10px 30px rgba(15,23,42,.12)"}}>
         <iframe
