@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import AccountCopy from "./AccountCopy";
 
 const BASE = "https://seojae-church.vercel.app/invitation-2026";
 const kakao = "https://map.kakao.com/link/to/" + encodeURIComponent("서재교회") + ",35.8726356,128.4976413";
@@ -20,16 +21,16 @@ export const metadata: Metadata = {
 
 const styles = `
 .inv26-shell{background:#e8f5ff;padding:18px 12px 48px;font-family:Arial,'Apple SD Gothic Neo','Malgun Gothic',sans-serif}
-.inv26-paper{max-width:640px;margin:auto;position:relative;isolation:isolate;overflow:hidden;text-align:center;background:linear-gradient(170deg,#eefaff 0%,#fff 32%,#fafdff 60%,#e8f5ff 100%);border:8px solid #cde8f7;border-radius:19px;box-shadow:0 8px 32px #0e47771b;color:#173d6c}
-.inv26-paper::before{content:'';position:absolute;z-index:-1;width:280px;height:250px;left:-78px;top:-76px;border-radius:50%;background:radial-gradient(ellipse at 20% 20%,#95cc60b3 0 18%,transparent 19%),radial-gradient(ellipse at 60% 38%,#a3d47194 0 20%,transparent 21%),radial-gradient(ellipse at 25% 73%,#93bd6c88 0 18%,transparent 19%),radial-gradient(ellipse at 83% 73%,#c5df9990 0 18%,transparent 19%)}
+.inv26-paper{max-width:760px;margin:auto;position:relative;isolation:isolate;overflow:hidden;text-align:center;background:linear-gradient(160deg,#e9f7ff 0%,#fff 25%,#fafdff 75%,#e4f3ff 100%);border:9px solid #cde8f7;border-radius:24px;box-shadow:0 8px 32px #0e47771b;color:#173d6c}
+.inv26-paper::before{content:'';position:absolute;z-index:-1;width:350px;height:300px;left:-78px;top:-76px;border-radius:50%;background:radial-gradient(ellipse at 20% 20%,#95cc60b3 0 18%,transparent 19%),radial-gradient(ellipse at 60% 38%,#a3d47194 0 20%,transparent 21%),radial-gradient(ellipse at 25% 73%,#93bd6c88 0 18%,transparent 19%),radial-gradient(ellipse at 83% 73%,#c5df9990 0 18%,transparent 19%)}
 .inv26-paper::after{content:'';position:absolute;z-index:-1;inset:auto -12% -150px -12%;height:350px;background:radial-gradient(ellipse at 15% 80%,#a9d7eb8a,transparent 52%),radial-gradient(ellipse at 88% 85%,#a8c68a99,transparent 47%)}
 .inv26-top{padding:38px 30px 18px}
 .inv26-flourish{font-size:25px;color:#467bad;letter-spacing:10px;line-height:1.1}
-.inv26-head{margin:12px auto 0;font-family:Georgia,'Nanum Myeongjo','Batang',serif;color:#104883;line-height:1.32;font-size:clamp(28px,6vw,42px);font-weight:800;word-break:keep-all}
+.inv26-head{margin:12px auto 0;font-family:Georgia,'Nanum Myeongjo','Batang',serif;color:#104883;line-height:1.32;font-size:clamp(25px,5vw,34px);font-weight:800;word-break:keep-all}
 .inv26-head span{display:block;font-size:1em;font-weight:inherit}
 .inv26-thinline{width:70%;height:1px;background:#9dc7e5;margin:21px auto 0}
 .inv26-label{font-weight:800;letter-spacing:.06em;color:#15538f;font-size:22px;margin:24px 0 14px}
-.inv26-invite{font-family:'Nanum Myeongjo','Batang',serif;word-break:keep-all;line-height:1.95;font-size:clamp(14px,2.9vw,17px);color:#263b58;margin:0 auto;max-width:460px}
+.inv26-invite{font-family:'Nanum Myeongjo','Batang',serif;word-break:keep-all;line-height:1.95;font-size:clamp(14px,2.9vw,18px);color:#263b58;margin:0 auto;max-width:460px}
 .inv26-invite p{margin:0 0 15px}
 .inv26-info{background:#e6f2fdcc;margin:24px 24px 19px;padding:14px 15px;border-radius:16px;font-weight:700;line-height:2;color:#093a70}
 .inv26-info b{font-weight:900}
@@ -38,7 +39,7 @@ const styles = `
 .inv26-person:nth-child(2){background:linear-gradient(140deg,#ebf8ff,#e0eef9)}
 .inv26-role{display:block;font-weight:800;font-size:15px;color:#fff;background:#569984;border-radius:20px;padding:3px 12px;margin:0 auto 8px;width:max-content}
 .inv26-person:nth-child(2) .inv26-role{background:#4c8fcc}
-.inv26-person strong{font-family:'Nanum Myeongjo','Batang',serif;display:block;font-size:clamp(20px,5vw,28px);color:#173c66}
+.inv26-person strong{font-family:'Nanum Myeongjo','Batang',serif;display:block;font-size:clamp(22px,5vw,31px);color:#173c66}
 .inv26-way{padding:0 20px 25px}
 .inv26-way h2{font-size:24px;color:#174e88;margin:10px 0 12px}
 .inv26-address{display:block;word-break:keep-all;color:#174e88;text-decoration:underline;text-underline-offset:4px;font-size:16px;font-weight:800;margin:5px 0}
@@ -55,6 +56,7 @@ const styles = `
 .inv26-account{display:flex;justify-content:center;align-items:center;gap:7px;flex-wrap:wrap;border-top:1px solid #c1dfee;background:#eff8ff;padding:15px 8px 18px;font-size:clamp(11px,2.8vw,15px);white-space:nowrap;color:#15477c}
 .inv26-account b{font-weight:850}
 .inv26-end{padding:14px 18px 24px;color:#54728f;font-size:12px}
+@media(min-width:900px){.inv26-shell{padding:32px 12px 60px}.inv26-top{padding-top:52px}}
 @media(max-width:390px){.inv26-top{padding:27px 15px 15px}.inv26-info,.inv26-people{margin-left:10px;margin-right:10px}.inv26-way{padding-left:12px;padding-right:12px}.inv26-mapbtn{font-size:14px}.inv26-label{font-size:20px}}
 `;
 
@@ -95,7 +97,7 @@ export default function Invitation2026() {
         <a className="inv26-navibtn" href={naverNavi}>네이버 내비 앱으로 길 안내 (앱 설치 시) ↗</a>
         <p className="inv26-tip">카카오톡 안에서 앱 연결이 막히면 위의 지도 버튼을 누르거나<br/>오른쪽 위 ⋯ 메뉴에서 '다른 브라우저로 열기'를 선택해 주세요.<br/>카카오내비 앱 직접 실행은 별도 서비스 연동이 필요합니다.</p>
       </section>
-      <div className="inv26-account">계좌 안내 | <b>신한은행 110-280-277516</b> 예금주 천길진</div>
+      <AccountCopy />
       <div className="inv26-end">사람이 마땅히 우리를 그리스도의 일꾼이요 하나님의 비밀을 맡은 자로 여길지어다<br/>고린도전서 4:1-2</div>
     </article>
     <style dangerouslySetInnerHTML={{__html:styles}} />
