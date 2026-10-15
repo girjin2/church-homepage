@@ -60,6 +60,34 @@ const styles = `
 @media(max-width:390px){.inv26-top{padding:27px 15px 15px}.inv26-info,.inv26-people{margin-left:10px;margin-right:10px}.inv26-way{padding-left:12px;padding-right:12px}.inv26-mapbtn{font-size:14px}.inv26-label{font-size:20px}}
 `;
 
+const extraStyles = `
+html:has(.inv26-shell){color-scheme:light!important;background:#f2f9ff!important}
+body:has(.inv26-shell){color-scheme:light!important;background:#f2f9ff!important;color:#173d6c!important}
+body:has(.inv26-shell) .header,body:has(.inv26-shell) .footer{display:none!important}
+body:has(.inv26-shell) main{min-height:100vh!important}
+.inv26-shell,.inv26-paper,.inv26-top,.inv26-info,.inv26-person,.inv26-realmap,.inv26-way,.inv26-end,.inv26-account{color-scheme:light!important}
+.inv26-shell{min-height:100vh!important;background:#eaf7ff!important;padding:12px 10px 35px!important}
+.inv26-paper{background:linear-gradient(165deg,#f3fbff 0%,#fff 24%,#fff 78%,#eaf6ff 100%)!important;color:#143e71!important;border-color:#cde8f7!important}
+.inv26-head{font-size:clamp(23px,5.2vw,33px)!important;color:#12509c!important;line-height:1.35!important}
+.inv26-top{padding:26px 15px 12px!important}
+.inv26-label{font-size:20px!important;margin:16px 0 12px!important}
+.inv26-invite{font-size:clamp(14px,3.5vw,17px)!important;line-height:1.72!important;color:#16395f!important;max-width:95%!important}
+.inv26-invite p{margin:0 0 13px!important}
+.inv26-info{background:#e7f3fc!important;color:#0b427c!important;margin:17px 14px 18px!important;padding:12px!important;line-height:1.45!important}
+.inv26-date{display:flex;align-items:flex-start;gap:10px;justify-content:center;margin:8px 0;flex-wrap:wrap;word-break:keep-all!important;overflow-wrap:normal!important}
+.inv26-date>span{flex:0 0 auto;white-space:nowrap;color:#235c9d}
+.inv26-date>b{font-size:clamp(14px,3.35vw,19px);white-space:normal;word-break:keep-all!important;overflow-wrap:normal!important;color:#083971!important;max-width:100%;line-height:1.55}
+.inv26-people{margin:0 14px 20px!important;gap:8px!important}
+.inv26-person{padding:12px 5px!important;color:#173c66!important}
+.inv26-person strong{font-size:clamp(18px,4.7vw,27px)!important;color:#143e71!important;word-break:keep-all}
+.inv26-way{padding:0 15px 22px!important}
+.inv26-way h2{margin:10px 0!important}
+.inv26-realmap,.inv26-realmap small{background:#fff!important;color:#425d78!important}
+.inv26-mapbtn{font-size:clamp(13px,3.45vw,17px)!important}
+.inv26-account{background:#eff8ff!important;color:#15477c!important;line-height:1.5!important}
+.inv26-end{color:#496c91!important;background:#edf8ffb0!important}
+@media(max-width:380px){.inv26-date>b{font-size:14px!important}.inv26-account{font-size:11px!important}.inv26-date{gap:5px}}
+`;
 export default function Invitation2026() {
   return <div className="inv26-shell">
     <article className="inv26-paper">
@@ -75,8 +103,8 @@ export default function Invitation2026() {
         </div>
       </div>
       <section className="inv26-info" aria-label="예배 일시 및 장소">
-        <div>일시 | <b>2026년 11월 14일 토요일 오전 11시</b></div>
-        <div>장소 | <b>서재교회 본당</b></div>
+        <div className="inv26-date"><span>일시</span><b>2026년 11월 14일 (토) 오전 11시</b></div>
+        <div className="inv26-date"><span>장소</span><b>서재교회 본당</b></div>
       </section>
       <section className="inv26-people" aria-label="은퇴 및 위임 목사">
         <div className="inv26-person"><span className="inv26-role">은퇴 목사</span><strong>천성일 목사</strong></div>
@@ -95,11 +123,11 @@ export default function Invitation2026() {
           <a className="inv26-mapbtn inv26-naver" href={naverMap} target="_blank" rel="noopener noreferrer">네이버지도 열기 ↗</a>
         </div>
         <a className="inv26-navibtn" href={naverNavi}>네이버 내비 앱으로 길 안내 (앱 설치 시) ↗</a>
-        <p className="inv26-tip">카카오톡 안에서 앱 연결이 막히면 위의 지도 버튼을 누르거나<br/>오른쪽 위 ⋯ 메뉴에서 '다른 브라우저로 열기'를 선택해 주세요.<br/>카카오내비 앱 직접 실행은 별도 서비스 연동이 필요합니다.</p>
+        <p className="inv26-tip">약도 대신 지도 버튼을 눌러 길찾기를 열어 주세요.</p>
       </section>
       <AccountCopy />
       <div className="inv26-end">사람이 마땅히 우리를 그리스도의 일꾼이요 하나님의 비밀을 맡은 자로 여길지어다<br/>고린도전서 4:1-2</div>
     </article>
-    <style dangerouslySetInnerHTML={{__html:styles}} />
+    <style dangerouslySetInnerHTML={{__html:styles + extraStyles}} />
   </div>;
 }
